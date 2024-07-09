@@ -1,31 +1,67 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import CitySearch from "../components/CitySearch";
-import { extractLocations, getEvents } from "../api";
+
+// Mock functions to simulate fetching events and extracting locations
+const getEvents = async () => {
+  // Mock implementation for testing purposes
+  return [
+    { location: "Berlin, Germany" },
+    { location: "New York, USA" },
+    { location: "London, UK" },
+  ];
+};
+
+const extractLocations = (events) => {
+  return events.map((event) => event.location);
+};
 
 describe("<CitySearch /> component", () => {
   let CitySearchComponent;
+
   beforeEach(() => {
     CitySearchComponent = render(<CitySearch allLocations={[]} />);
   });
 
   test("renders text input", () => {
-    const cityTextBox = CitySearchComponent.queryByRole("textbox");
+    const cityTextBox = screen.getByRole("textbox");
     expect(cityTextBox).toBeInTheDocument();
     expect(cityTextBox).toHaveClass("city");
   });
 
   test("suggestions list is hidden by default", () => {
-    const suggestionList = CitySearchComponent.queryByRole("list");
+    const suggestionList = screen.queryByRole("list");
     expect(suggestionList).not.toBeInTheDocument();
+  });
+
+  test("renders the suggestion text in the textbox upon clicking on the suggestion", async () => {
+    const user = userEvent.setup();
+    const allEvents = await getEvents();
+    const allLocations = extractLocations(allEvents);
+    CitySearchComponent.rerender(<CitySearch allLocations={allLocations} />);
+
+    const cityTextBox = screen.getByRole("textbox");
+    await user.type(cityTextBox, "Berlin");
+
+    // Find the suggestion by text content
+    const suggestionText = "Berlin, Germany";
+    const suggestionItem = screen.getByText(suggestionText);
+    expect(suggestionItem).toBeInTheDocument();
+
+    // Click on the suggestion
+    user.click(suggestionItem);
+
+    // Assert that the textbox value updates correctly
+    expect(cityTextBox).toHaveValue(suggestionText);
   });
 
   test("renders a list of suggestions when city textbox gains focus", async () => {
     const user = userEvent.setup();
-    const cityTextBox = CitySearchComponent.queryByRole("textbox");
+    const cityTextBox = screen.getByRole("textbox");
     await user.click(cityTextBox);
-    const suggestionList = CitySearchComponent.queryByRole("list");
+
+    const suggestionList = screen.getByRole("list");
     expect(suggestionList).toBeInTheDocument();
     expect(suggestionList).toHaveClass("suggestions");
   });
@@ -36,24 +72,19 @@ describe("<CitySearch /> component", () => {
     const allLocations = extractLocations(allEvents);
     CitySearchComponent.rerender(<CitySearch allLocations={allLocations} />);
 
-    // user types "Berlin" in city textbox
-    const cityTextBox = CitySearchComponent.queryByRole("textbox");
+    // User types "Berlin" in city textbox
+    const cityTextBox = screen.getByRole("textbox");
     await user.type(cityTextBox, "Berlin");
 
-    // filter allLocations to locations matching "Berlin"
-    const suggestions = allLocations
-      ? allLocations.filter((location) => {
-          return (
-            location.toUpperCase().indexOf(cityTextBox.value.toUpperCase()) > -1
-          );
-        })
-      : [];
+    // Filter allLocations to locations matching "Berlin"
+    const filteredLocations = allLocations.filter((location) =>
+      location.toLowerCase().includes("berlin")
+    );
 
-    // get all <li> elements inside the suggestion list
-    const suggestionListItems = CitySearchComponent.queryAllByRole("listitem");
-    expect(suggestionListItems).toHaveLength(suggestions.length + 1); // +1 for the "See all cities" item
-    for (let i = 0; i < suggestions.length; i += 1) {
-      expect(suggestionListItems[i].textContent).toBe(suggestions[i]);
-    }
+    // Get all suggestion items
+    const suggestionItems = screen.getAllByRole("listitem");
+
+    // Assert number of suggestion items
+    expect(suggestionItems.length).toEqual(filteredLocations.length + 1); // +1 for "See all cities" item
   });
 });

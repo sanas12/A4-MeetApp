@@ -1,7 +1,8 @@
 // src/__tests__/NumberOfEvents.test.js
+import React from "react";
 
 import { render, screen, fireEvent } from "@testing-library/react";
-import NumberOfEvents from "../components/NumberOfEvents";
+import NumberOfEvents from "../components/NumberofEvents";
 
 describe("<NumberOfEvents /> component", () => {
   let handleNumberOfEventsChange;
