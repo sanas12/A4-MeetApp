@@ -11,20 +11,6 @@ describe("<NumberOfEvents /> component", () => {
     handleNumberOfEventsChange = jest.fn();
   });
 
-  test("renders default number of events as 32", () => {
-    render(
-      <NumberOfEvents
-        numberOfEvents={32}
-        onNumberOfEventsChange={handleNumberOfEventsChange}
-      />
-    );
-
-    const button32 = screen.getByText("32 events");
-    expect(button32).toBeInTheDocument();
-    fireEvent.click(button32);
-    expect(handleNumberOfEventsChange).toHaveBeenCalledWith(32);
-  });
-
   test("renders and handles 5 events button", () => {
     render(
       <NumberOfEvents
@@ -37,6 +23,20 @@ describe("<NumberOfEvents /> component", () => {
     expect(button5).toBeInTheDocument();
     fireEvent.click(button5);
     expect(handleNumberOfEventsChange).toHaveBeenCalledWith(5);
+  });
+
+  test("renders default number of events as 32", () => {
+    render(
+      <NumberOfEvents
+        numberOfEvents={32}
+        onNumberOfEventsChange={handleNumberOfEventsChange}
+      />
+    );
+
+    const button32 = screen.getByText("32 events");
+    expect(button32).toBeInTheDocument();
+    fireEvent.click(button32);
+    expect(handleNumberOfEventsChange).toHaveBeenCalledWith(32);
   });
 
   test("renders and handles 10 events button", () => {

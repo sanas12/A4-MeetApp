@@ -1,13 +1,8 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState } from "react";
 const CitySearch = ({ allLocations }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-
-  useEffect(() => {
-    setSuggestions(allLocations);
-  }, [allLocations]);
 
   const handleInputChanged = (event) => {
     const value = event.target.value;
@@ -19,6 +14,7 @@ const CitySearch = ({ allLocations }) => {
 
     setQuery(value);
     setSuggestions(filteredLocations);
+    setShowSuggestions(true); // Ensure suggestions are shown when input changes
   };
 
   const handleItemClicked = (event) => {

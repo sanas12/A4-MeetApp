@@ -3,14 +3,7 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
-
-global.MutationObserver =
-  window.MutationObserver ||
-  class {
-    constructor(callback) {}
-    disconnect() {}
-    observe(element, initObject) {}
-  };
+import "mutationobserver-shim";
 
 // Here, add portions of the warning messages you want to intentionally prevent from appearing
 const MESSAGES_TO_IGNORE = [
@@ -27,3 +20,10 @@ console.error = (...args) => {
   );
   if (!ignoreMessage) originalError(...args);
 };
+
+Object.defineProperty(window, "getSelection", {
+  value: () => ({
+    toString: () => "",
+  }),
+  writable: true,
+});

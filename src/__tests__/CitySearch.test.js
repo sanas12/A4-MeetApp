@@ -1,6 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen, fireEvent } from "@testing-library/react";
 import CitySearch from "../components/CitySearch";
 
 // Mock functions to simulate fetching events and extracting locations
@@ -36,13 +35,14 @@ describe("<CitySearch /> component", () => {
   });
 
   test("renders the suggestion text in the textbox upon clicking on the suggestion", async () => {
-    const user = userEvent.setup();
     const allEvents = await getEvents();
     const allLocations = extractLocations(allEvents);
     CitySearchComponent.rerender(<CitySearch allLocations={allLocations} />);
 
     const cityTextBox = screen.getByRole("textbox");
-    await user.type(cityTextBox, "Berlin");
+    // await user.type(cityTextBox, "Berlin");
+    fireEvent.focus(cityTextBox);
+    fireEvent.change(cityTextBox, { target: { value: "Berlin" } });
 
     // Find the suggestion by text content
     const suggestionText = "Berlin, Germany";
@@ -50,16 +50,18 @@ describe("<CitySearch /> component", () => {
     expect(suggestionItem).toBeInTheDocument();
 
     // Click on the suggestion
-    user.click(suggestionItem);
+    // user.click(suggestionItem);
+    fireEvent.click(suggestionItem);
 
     // Assert that the textbox value updates correctly
     expect(cityTextBox).toHaveValue(suggestionText);
   });
 
   test("renders a list of suggestions when city textbox gains focus", async () => {
-    const user = userEvent.setup();
     const cityTextBox = screen.getByRole("textbox");
-    await user.click(cityTextBox);
+    // await user.click(cityTextBox);
+    fireEvent.focus(cityTextBox);
+    fireEvent.click(cityTextBox);
 
     const suggestionList = screen.getByRole("list");
     expect(suggestionList).toBeInTheDocument();
@@ -67,14 +69,15 @@ describe("<CitySearch /> component", () => {
   });
 
   test("updates list of suggestions correctly when user types in city textbox", async () => {
-    const user = userEvent.setup();
     const allEvents = await getEvents();
     const allLocations = extractLocations(allEvents);
     CitySearchComponent.rerender(<CitySearch allLocations={allLocations} />);
 
     // User types "Berlin" in city textbox
     const cityTextBox = screen.getByRole("textbox");
-    await user.type(cityTextBox, "Berlin");
+    // await user.type(cityTextBox, "Berlin");
+    fireEvent.focus(cityTextBox);
+    fireEvent.change(cityTextBox, { target: { value: "Berlin" } });
 
     // Filter allLocations to locations matching "Berlin"
     const filteredLocations = allLocations.filter((location) =>
