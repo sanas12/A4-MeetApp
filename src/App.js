@@ -10,6 +10,8 @@ import "./App.css";
 
 const App = () => {
   const [events, setEvents] = useState([]);
+  const [currentNOE, setCurrentNOE] = useState(32);
+
   const [numberOfEvents, setNumberOfEvents] = useState(32);
   const [allLocations, setAllLocations] = useState([]);
   const [currentCity, setCurrentCity] = useState("See all cities");
