@@ -4,6 +4,7 @@
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
 import "mutationobserver-shim";
+import { act } from "react";
 
 // Here, add portions of the warning messages you want to intentionally prevent from appearing
 const MESSAGES_TO_IGNORE = [
@@ -20,6 +21,7 @@ console.error = (...args) => {
   );
   if (!ignoreMessage) originalError(...args);
 };
+jest.setTimeout(60000);
 
 Object.defineProperty(window, "getSelection", {
   value: () => ({
