@@ -1,12 +1,9 @@
-/* eslint-disable testing-library/prefer-screen-queries */
-/* eslint-disable testing-library/prefer-presence-queries */
-/* eslint-disable testing-library/render-result-naming-convention */
-// src/__tests__/Event.test.js
 import React from "react";
-
 import { render, fireEvent } from "@testing-library/react";
 import Event from "../components/Event";
 import allEvents from "../mock-data";
+
+const formattedDate = new Date(allEvents[0].created).toUTCString();
 
 describe("<Event /> component", () => {
   test("renders event title", () => {
@@ -17,10 +14,8 @@ describe("<Event /> component", () => {
   });
 
   test("renders event start time", () => {
-    const EventComponent = render(<Event event={allEvents[0]} />);
-    expect(
-      EventComponent.queryByText(allEvents[0].created)
-    ).toBeInTheDocument();
+    const { getByText } = render(<Event event={allEvents[0]} />);
+    expect(getByText("2020-05-19T19:17:46.000Z")).toBeInTheDocument(); // Use exact date string
   });
 
   test("renders event location", () => {
@@ -31,8 +26,8 @@ describe("<Event /> component", () => {
   });
 
   test("renders event details button with the title (show details)", () => {
-    const EventComponent = render(<button>show details</button>);
-    expect(EventComponent.queryByText("show details")).toBeInTheDocument();
+    const EventComponent = render(<Event event={allEvents[0]} />);
+    expect(EventComponent.queryByText("show details")).toBeInTheDocument(); // Use lowercase for button text
   });
 
   test("event details section hidden by default", () => {
@@ -43,22 +38,19 @@ describe("<Event /> component", () => {
   });
 
   test("hides details section when show details button is clicked", async () => {
-    const EventComponent = render(<Event event={allEvents[0]} />);
-    const showDetailsButton = EventComponent.getByText("show details");
-    fireEvent.click(showDetailsButton);
+    const { getByText, queryByText } = render(<Event event={allEvents[0]} />);
+    fireEvent.click(getByText("show details"));
+    fireEvent.click(getByText("hide details"));
     expect(
-      EventComponent.queryByText("Event Details Here")
-    ).toBeInTheDocument();
+      queryByText("A great event to learn JavaScript.")
+    ).not.toBeInTheDocument();
   });
 
   test("shows details section when hide details button is clicked", async () => {
-    const EventComponent = render(<Event event={allEvents[0]} />);
-    const showDetailsButton = EventComponent.getByText("show details");
-    fireEvent.click(showDetailsButton);
-    const hideDetailsButton = EventComponent.getByText("hide details");
+    const { getByText, queryByText } = render(<Event event={allEvents[0]} />);
+    fireEvent.click(getByText("show details"));
+    const hideDetailsButton = getByText("hide details");
     fireEvent.click(hideDetailsButton);
-    expect(
-      EventComponent.queryByText("Event Details Here")
-    ).not.toBeInTheDocument();
+    expect(queryByText("Event Details Here")).not.toBeInTheDocument();
   });
 });

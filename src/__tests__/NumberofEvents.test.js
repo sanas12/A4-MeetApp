@@ -1,28 +1,18 @@
 // src/__tests__/NumberOfEvents.test.js
 import React from "react";
 
+// src/__tests__/NumberOfEvents.test.js
+
 import { render, screen, fireEvent } from "@testing-library/react";
-import NumberOfEvents from "../components/NumberofEvents";
+import NumberOfEvents from "../components/NumberOfEvents";
 
 describe("<NumberOfEvents /> component", () => {
   let handleNumberOfEventsChange;
+  let mockSetErrorAlert;
 
   beforeEach(() => {
     handleNumberOfEventsChange = jest.fn();
-  });
-
-  test("renders and handles 5 events button", () => {
-    render(
-      <NumberOfEvents
-        numberOfEvents={32}
-        onNumberOfEventsChange={handleNumberOfEventsChange}
-      />
-    );
-
-    const button5 = screen.getByText("5 events");
-    expect(button5).toBeInTheDocument();
-    fireEvent.click(button5);
-    expect(handleNumberOfEventsChange).toHaveBeenCalledWith(5);
+    mockSetErrorAlert = jest.fn();
   });
 
   test("renders default number of events as 32", () => {
@@ -30,6 +20,7 @@ describe("<NumberOfEvents /> component", () => {
       <NumberOfEvents
         numberOfEvents={32}
         onNumberOfEventsChange={handleNumberOfEventsChange}
+        setErrorAlert={mockSetErrorAlert}
       />
     );
 
@@ -39,11 +30,27 @@ describe("<NumberOfEvents /> component", () => {
     expect(handleNumberOfEventsChange).toHaveBeenCalledWith(32);
   });
 
+  test("renders and handles 5 events button", () => {
+    render(
+      <NumberOfEvents
+        numberOfEvents={32}
+        onNumberOfEventsChange={handleNumberOfEventsChange}
+        setErrorAlert={mockSetErrorAlert}
+      />
+    );
+
+    const button5 = screen.getByText("5 events");
+    expect(button5).toBeInTheDocument();
+    fireEvent.click(button5);
+    expect(handleNumberOfEventsChange).toHaveBeenCalledWith(5);
+  });
+
   test("renders and handles 10 events button", () => {
     render(
       <NumberOfEvents
         numberOfEvents={32}
         onNumberOfEventsChange={handleNumberOfEventsChange}
+        setErrorAlert={mockSetErrorAlert}
       />
     );
 
@@ -58,6 +65,7 @@ describe("<NumberOfEvents /> component", () => {
       <NumberOfEvents
         numberOfEvents={32}
         onNumberOfEventsChange={handleNumberOfEventsChange}
+        setErrorAlert={mockSetErrorAlert}
       />
     );
 
