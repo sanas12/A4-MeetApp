@@ -27,7 +27,7 @@ export const getAccessToken = async () => {
     const code = await searchParams.get("code");
     if (!code) {
       const response = await fetch(
-        "arn:aws:execute-api:eu-central-1:058264326313:g962ee6d1e/*/GET/api/get-auth-url"
+        "https://g962ee6d1e.execute-api.eu-central-1.amazonaws.com/dev/api/get-auth-url"
       );
       const result = await response.json();
       const { authUrl } = result;
@@ -40,7 +40,7 @@ export const getAccessToken = async () => {
 
 const checkToken = async (accessToken) => {
   const response = await fetch(
-    `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
+    `https://g962ee6d1e.execute-api.eu-central-1.amazonaws.com/dev/api/token`
   );
   const result = await response.json();
   return result;
