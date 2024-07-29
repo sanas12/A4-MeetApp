@@ -40,7 +40,7 @@ export const getAccessToken = async () => {
 
 const checkToken = async (accessToken) => {
   const response = await fetch(
-    `https://g962ee6d1e.execute-api.eu-central-1.amazonaws.com/dev/api/token`
+    `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
   );
   const result = await response.json();
   return result;
@@ -49,7 +49,7 @@ const checkToken = async (accessToken) => {
 const getToken = async (code) => {
   const encodeCode = encodeURIComponent(code);
   const response = await fetch(
-    "arn:aws:execute-api:eu-central-1:058264326313:g962ee6d1e/*/GET/api/get-events/{access_token}" +
+    "https://g962ee6d1e.execute-api.eu-central-1.amazonaws.com/dev/api/token" +
       "/" +
       encodeCode
   );
@@ -93,7 +93,7 @@ export const getEvents = async () => {
   if (token) {
     removeQuery();
     const url =
-      "arn:aws:execute-api:eu-central-1:058264326313:g962ee6d1e/*/GET/api/get-events" +
+      "https://g962ee6d1e.execute-api.eu-central-1.amazonaws.com/dev/api/get-events" +
       "/" +
       token;
     const response = await fetch(url);
