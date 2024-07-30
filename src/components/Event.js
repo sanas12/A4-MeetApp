@@ -1,7 +1,5 @@
 // src/components/Event.js
-import React from "react";
-
-import { useState } from "react";
+import React, { useState } from "react";
 
 const Event = ({ event }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -10,14 +8,18 @@ const Event = ({ event }) => {
     return null;
   }
   return (
-    <li>
+    <li className="event">
       <div>{event.summary}</div>
       <div>{event.created}</div>
-      <div>{event.location} </div>
-      <button onClick={() => setShowDetails(true)}>show details</button>
-      <button onClick={() => setShowDetails(false)}>hide details</button>
+      <div>{event.location}</div>
+      <button
+        className="details-btn"
+        onClick={() => setShowDetails(!showDetails)}
+      >
+        {showDetails ? "hide details" : "show details"}
+      </button>
       {showDetails && (
-        <div>
+        <div className="details">
           <p>Event Details Here</p>
         </div>
       )}

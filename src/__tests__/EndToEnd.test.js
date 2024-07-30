@@ -1,44 +1,38 @@
 import puppeteer from "puppeteer";
-
-// Set a longer timeout for the entire test suite
-jest.setTimeout(120000); // 2 minutes
-
+// FEATURE 2
 describe("show/hide an event details", () => {
   let browser;
   let page;
-
   beforeAll(async () => {
-    browser = await puppeteer.launch({
-      headless: false,
-      slowMo: 250,
-      timeout: 0,
-    });
+    browser = await puppeteer.launch();
     page = await browser.newPage();
     await page.goto("http://localhost:3000/");
-    await page.waitForSelector(".event", { timeout: 60000 }); // Increase Puppeteer selector timeout to 60 seconds
+    // wait for the event list to render
+    await page.waitForSelector(".event");
   });
 
   afterAll(() => {
     browser.close();
   });
 
+  // SCENARIO 1
   test("An event element is collapsed by default", async () => {
     const eventDetails = await page.$(".event .details");
-    console.log("Event details:", eventDetails); // Debug log
     expect(eventDetails).toBeNull();
   });
 
-  test("User can expand an event to see details", async () => {
+  // SCENARIO 2
+  test("User can expand an event to see its details", async () => {
     await page.click(".event .details-btn");
     const eventDetails = await page.$(".event .details");
-    console.log("Event details after click:", eventDetails); // Debug log
     expect(eventDetails).toBeDefined();
   });
 
+  // SCENARIO 3
   test("User can collapse an event to hide details", async () => {
-    await page.click(".event .details-btn");
+    await page.click(".event .details-btn"); // Expand details first
+    // Then collapse details
     const eventDetails = await page.$(".event .details");
-    console.log("Event details after collapse:", eventDetails); // Debug log
     expect(eventDetails).toBeNull();
   });
 });

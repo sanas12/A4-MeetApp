@@ -1,7 +1,5 @@
 // src/App.js
-import React from "react";
-
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import CitySearch from "./components/CitySearch";
 import EventList from "./components/EventList";
 import NumberOfEvents from "./components/NumberOfEvents";
@@ -10,8 +8,6 @@ import "./App.css";
 
 const App = () => {
   const [events, setEvents] = useState([]);
-  const [currentNOE, setCurrentNOE] = useState(32);
-
   const [numberOfEvents, setNumberOfEvents] = useState(32);
   const [allLocations, setAllLocations] = useState([]);
   const [currentCity, setCurrentCity] = useState("See all cities");

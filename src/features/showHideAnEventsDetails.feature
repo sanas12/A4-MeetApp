@@ -1,16 +1,16 @@
-Feature: Show/Hide Event Details
+Feature: Show and hide events details
 
-  Scenario: An event element is collapsed by default.
-    Given the user has not yet tapped on Show Details
-    When the user is viewing the list of events
-    Then the app should hide the event details by default
+ Scenario: An event element is collapsed by default.
+  Given the user first opens the app
+  When the user recieves the full list of events (specific for the city or all events)
+  Then all events will colapse by default.
 
-  Scenario:  User can expand an event to see details.
-    Given the user is viewing the list of events
-    When the user taps on a specific event
-    Then the app should display the details of that event
-
-  Scenario: User can collapse an event to hide details.
-    Given the user is viewing the details of an event
-    When the user taps on the Hide Details option
-    Then the app should hide the event details and return to the event list
+ Scenario: User can expand an event to see its details
+  Given the user gets a list of events
+  When a user selects an event's details
+  Then the details will show up for that choosen event
+  
+ Scenario: User can collapse an event to hide its details
+  Given the user sees the details of an event
+  When the user presses a button to hide event's details
+  Then the details of that even will be hidden
