@@ -21,11 +21,26 @@ console.error = (...args) => {
   );
   if (!ignoreMessage) originalError(...args);
 };
-jest.setTimeout(60000);
 
 Object.defineProperty(window, "getSelection", {
   value: () => ({
     toString: () => "",
   }),
   writable: true,
+});
+const { ResizeObserver } = window;
+
+beforeEach(() => {
+  //@ts-ignore
+  delete window.ResizeObserver;
+  window.ResizeObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+  }));
+});
+
+afterEach(() => {
+  window.ResizeObserver = ResizeObserver;
+  jest.restoreAllMocks();
 });

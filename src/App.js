@@ -3,9 +3,10 @@ import CitySearch from "./components/CitySearch";
 import EventList from "./components/EventList";
 import NumberOfEvents from "./components/NumberOfEvents";
 import { extractLocations, getEvents } from "./api";
-import "./App.css";
 import { InfoAlert, ErrorAlert, WarningAlert } from "./components/Alert";
 import CityEventsChart from "./components/CityEventsChart";
+import EventGenresChart from "./components/EventGenresChart";
+import "./App.css";
 
 const App = () => {
   const [events, setEvents] = useState([]);
@@ -30,16 +31,18 @@ const App = () => {
     if (navigator.onLine) {
       setWarningAlert("");
     } else {
-      setWarningAlert("You are gone offline, events are loaded from cache!");
+      setWarningAlert("You are offline, events are loaded from cache!");
     }
     fetchData();
   }, [currentCity, numberOfEvents]);
+
   return (
     <div className="App">
+      <h1>Meet App by Sowmya Sanala</h1>
       <div className="alerts-container">
-        {infoAlert.length ? <InfoAlert text={infoAlert} /> : null}
-        {errorAlert.length ? <ErrorAlert text={errorAlert} /> : null}
-        {warningAlert.length ? <WarningAlert text={warningAlert} /> : null}
+        {infoAlert && <InfoAlert text={infoAlert} />}
+        {errorAlert && <ErrorAlert text={errorAlert} />}
+        {warningAlert && <WarningAlert text={warningAlert} />}
       </div>
       <CitySearch
         allLocations={allLocations}
@@ -51,8 +54,10 @@ const App = () => {
         setNumberOfEvents={setNumberOfEvents}
         setErrorAlert={setErrorAlert}
       />
-      <CityEventsChart allLocations={allLocations} events={events} />
-
+      <div className="charts-container">
+        <EventGenresChart events={events} />
+        <CityEventsChart allLocations={allLocations} events={events} />
+      </div>
       <EventList events={events} />
     </div>
   );

@@ -3,6 +3,7 @@ import { render, within, waitFor } from "@testing-library/react";
 import App from "../App";
 import mockData from "../mock-data";
 import userEvent from "@testing-library/user-event";
+import React from "react";
 
 const feature = loadFeature("./src/features/filterEventsByCity.feature");
 

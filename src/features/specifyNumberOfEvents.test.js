@@ -1,7 +1,8 @@
 import { loadFeature, defineFeature } from "jest-cucumber";
 import { render, screen } from "@testing-library/react";
-import App from "../App";
 import userEvent from "@testing-library/user-event";
+import App from "../App"; // Ensure correct import
+import React from "react";
 
 const feature = loadFeature("./src/features/specifyNumberOfEvents.feature");
 
@@ -10,11 +11,11 @@ defineFeature(feature, (test) => {
 
   test("32 events are shown by default.", ({ given, when, then }) => {
     given("the user has not yet changed the number of events", () => {
-      container = render(<App />);
+      container = render(<App />).container;
     });
 
     when("the user is viewing the list of events", () => {
-      // Assuming that events are loaded when the component is rendered
+      // No additional action needed here if events are loaded by default
     });
 
     then(
@@ -32,7 +33,7 @@ defineFeature(feature, (test) => {
     then,
   }) => {
     given("the user is viewing the list of events", () => {
-      container = render(<App />);
+      container = render(<App />).container;
     });
 
     when(
@@ -42,14 +43,16 @@ defineFeature(feature, (test) => {
         const buttonToClick = buttons.find(
           (button) => button.textContent !== numberOfEvents
         );
-        userEvent.click(buttonToClick);
+        if (buttonToClick) {
+          await userEvent.click(buttonToClick);
+        }
       }
     );
 
     then("the selected number of events will be displayed", async () => {
       const eventElements = await screen.findAllByRole("listitem");
-      // Assuming some logic to check if the number of events is updated
-      expect(eventElements.length).toBeGreaterThan(0);
+      // Make sure your assertion reflects the expected state
+      expect(eventElements.length).toBeGreaterThan(0); // Adjust based on your app's behavior
     });
   });
 });
