@@ -1,3 +1,4 @@
+import React from "react";
 import puppeteer from "puppeteer";
 // FEATURE 2
 describe("show/hide an event details", () => {
