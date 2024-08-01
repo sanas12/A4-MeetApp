@@ -20,6 +20,7 @@ const NumberOfEvents = ({
     } else {
       setErrorAlert("");
       setNumberOfEvents(value);
+      // onNumberOfEventsChange(value);
     }
   };
 
@@ -28,6 +29,7 @@ const NumberOfEvents = ({
       <label htmlFor="event-number-input">Number of Events:</label>
       <div className="number-of-events">
         <input
+          id="event-number-input"
           type="text"
           className="number-input"
           value={inputValue}
